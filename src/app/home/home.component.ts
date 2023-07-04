@@ -5,6 +5,7 @@ import {catchError, delay, delayWhen, filter, finalize, map, retryWhen, shareRep
 import { CoursesService } from '../services/courses.service';
 import { LoadingService } from '../loading/loading.service';
 import { MessagesService } from '../messages/messages.service';
+import { CoursesStore } from '../services/courses.store';
 
 
 @Component({
@@ -19,45 +20,15 @@ export class HomeComponent implements OnInit {
   advancedCourses$: Observable<Course[]>;
 
 
-  constructor(
-    private coursesService: CoursesService,
-    private loadingService: LoadingService,
-    private messagesService: MessagesService) {}
+  constructor(private coursesStore: CoursesStore) {}
 
   ngOnInit() {
     this.reloadCourses();
   }
 
   reloadCourses() {
-    // this.loadingService.loadingOn();
-    const courses$ = this.coursesService.loadAllCourses()
-      .pipe(
-        map(courses => courses.sort(sortCoursesBySeqNo)), 
-        // finalize(() => this.loadingService.loadingOff())
-        //something goes wrong while fetching courses - use catch
-        catchError(err => {
-          const message = "Could not load courses";
-          this.messagesService.showErrors(message);
-          console.log(message, err);
-          return throwError(err);
-          // will create a new Observable using throwError that immediately emits error and ends its lifecycle 
-        })
-      );
+    this.beginnerCourses$ = this.coursesStore.filterByCategory('BEGINNER')
 
-    const loadCourses$ = this.loadingService.showLoaderUntilCompleted<Course[]>(courses$);
-
-    this.beginnerCourses$ = loadCourses$
-      .pipe(
-        map(courses => courses.filter(course => course.category === 'BEGINNER'))
-      )
-
-    this.advancedCourses$ = loadCourses$
-        .pipe(
-          map(courses => courses.filter(course => course.category === 'ADVANCED'))
-        )
+    this.advancedCourses$ = this.coursesStore.filterByCategory('ADVANCED')
   }
 }
-
-
-
-
