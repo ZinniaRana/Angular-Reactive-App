@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
     // this.loadingService.loadingOn();
     const courses$ = this.coursesService.loadAllCourses()
       .pipe(
-        map(courses => courses.sort(sortCoursesBySeqNo)),
+        map(courses => courses.sort(sortCoursesBySeqNo)), 
         // finalize(() => this.loadingService.loadingOff())
         //something goes wrong while fetching courses - use catch
         catchError(err => {

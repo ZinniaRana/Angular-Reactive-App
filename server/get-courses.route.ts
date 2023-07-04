@@ -18,6 +18,12 @@ export function getAllCourses(req: Request, res: Response) {
              res.status(200).json({payload:Object.values(COURSES)});
 
         }, 1500);
+
+/* // fake error to display error message
+        console.log("Error loading courses");
+        res.status(500).json({message: "Error Occurred!"});
+        return;
+*/
 }
 
 
