@@ -14,22 +14,29 @@
     Search
   </button>
 
-  <ng-container *ngIf="(searchResults$ | async) as lessons">
-    <table class="lessons-table mat-elevation-z7">
-
-        <thead>
-          <th>#</th>
-          <th>Description</th>
-          <th>Duration</th>
-        </thead>
-
-        <tr class="lesson-row" *ngFor="let lesson of lessons">
-          <td class="seqno-cell">{{lesson.seqNo}}</td>
-          <td class="description-cell">{{lesson.description}}</td>
-          <td class="duration-cell">{{lesson.duration}}</td>
-        </tr>
-    </table>
+  <ng-container *ngIf="!activeLesson"; else detail>
+    <ng-container *ngIf="(searchResults$ | async) as lessons">
+      <table class="lessons-table mat-elevation-z7">
+  
+          <thead>
+            <th>#</th>
+            <th>Description</th>
+            <th>Duration</th>
+          </thead>
+  
+          <tr class="lesson-row" *ngFor="let lesson of lessons"
+            (click)="openLesson(lesson)">
+            <td class="seqno-cell">{{lesson.seqNo}}</td>
+            <td class="description-cell">{{lesson.description}}</td>
+            <td class="duration-cell">{{lesson.duration}}</td>
+          </tr>
+      </table>
+    </ng-container>
   </ng-container>
+  <ng-template #detail>
+    <button mat-raised-button class="back-btn" (click)="onBackToSearch()">Back To Search</button>
+    <lesson></lesson>
+  </ng-template>
 </div>
 
 
