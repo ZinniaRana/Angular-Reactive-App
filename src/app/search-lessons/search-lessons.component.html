@@ -14,7 +14,7 @@
     Search
   </button>
 
-  <ng-container *ngIf="!activeLesson"; else detail>
+  <ng-container *ngIf="!activeLesson;else detail">
     <ng-container *ngIf="(searchResults$ | async) as lessons">
       <table class="lessons-table mat-elevation-z7">
   
@@ -35,7 +35,8 @@
   </ng-container>
   <ng-template #detail>
     <button mat-raised-button class="back-btn" (click)="onBackToSearch()">Back To Search</button>
-    <lesson></lesson>
+
+    <lesson [lesson]="activeLesson"></lesson>
   </ng-template>
 </div>
 
